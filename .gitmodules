@@ -1,0 +1,3 @@
+[submodule "src/crypto/adiantum"]
+	path = src/crypto/adiantum
+	url = https://github.com/lukechampine/adiantum.git
