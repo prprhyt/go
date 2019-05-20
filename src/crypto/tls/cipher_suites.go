@@ -6,7 +6,7 @@ package tls
 
 import (
 	"crypto"
-	"crypto/adiantum"
+	"crypto/lukechampine/adiantum"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/des"

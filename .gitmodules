@@ -1,5 +1,5 @@
 [submodule "src/crypto/adiantum"]
-	path = src/crypto/adiantum
+	path = src/crypto/lukechampine/adiantum
 	url = https://github.com/prprhyt/adiantum.git
 [submodule "src/crypto/aead/chacha20"]
 	path = src/crypto/aead/chacha20
