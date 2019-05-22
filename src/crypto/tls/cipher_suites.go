@@ -99,8 +99,8 @@ var cipherSuites = []*cipherSuite{
 	{TLS_RSA_WITH_3DES_EDE_CBC_SHA, 24, 20, 8, rsaKA, 0, cipher3DES, macSHA1, nil},
 
 	// Adiantum-based cipher suites.
-	{TLS_RSA_WITH_ADIANTUM_128_SHA, 16, 20, 0, rsaKA, 0, cipherAdiantum, macSHA1, nil},
-
+	{TLS_ECDHE_ECDSA_WITH_ADIANTUM_128_SHA256, 16, 32, 16, ecdheECDSAKA, suiteECDHE | suiteECSign | suiteTLS12 , cipherAdiantum, macSHA256, nil},
+	
 	// RC4-based cipher suites are disabled by default.
 	{TLS_RSA_WITH_RC4_128_SHA, 16, 20, 0, rsaKA, suiteDefaultOff, cipherRC4, macSHA1, nil},
 	{TLS_ECDHE_RSA_WITH_RC4_128_SHA, 16, 20, 0, ecdheRSAKA, suiteECDHE | suiteDefaultOff, cipherRC4, macSHA1, nil},
@@ -117,6 +117,8 @@ type cipherSuiteTLS13 struct {
 }
 
 var cipherSuitesTLS13 = []*cipherSuiteTLS13{
+	// Adiantum-based cipher suites.
+	//{TLS_RSA_WITH_ADIANTUM_128_SHA256, 16, cipherAdiantum, crypto.SHA256},
 	{TLS_AES_128_GCM_SHA256, 16, aeadAESGCMTLS13, crypto.SHA256},
 	{TLS_CHACHA20_POLY1305_SHA256, 32, aeadChaCha20Poly1305, crypto.SHA256},
 	{TLS_AES_256_GCM_SHA384, 32, aeadAESGCMTLS13, crypto.SHA384},
@@ -469,7 +471,7 @@ const (
 	TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 uint16 = 0xc02c
 	TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305    uint16 = 0xcca8
 	TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305  uint16 = 0xcca9
-	TLS_RSA_WITH_ADIANTUM_128_SHA           uint16 = 0xdead
+	TLS_ECDHE_ECDSA_WITH_ADIANTUM_128_SHA256 uint16 = 0xbeef
 
 	// TLS 1.3 cipher suites.
 	TLS_AES_128_GCM_SHA256       uint16 = 0x1301

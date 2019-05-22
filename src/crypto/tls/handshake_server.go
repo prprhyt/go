@@ -308,6 +308,9 @@ func (hs *serverHandshakeState) pickCipherSuite() error {
 		}
 	}
 
+	fmt.Printf("%v", preferenceList)
+	fmt.Printf("%v", supportedList)
+
 	if hs.suite == nil {
 		c.sendAlert(alertHandshakeFailure)
 		return errors.New("tls: no cipher suite supported by both client and server")
@@ -781,28 +784,35 @@ func (hs *serverHandshakeState) setCipherSuite(id uint16, supportedCipherSuites 
 		if candidate == nil {
 			continue
 		}
+		fmt.Printf("true1")
 		// Don't select a ciphersuite which we can't
 		// support for this client.
 		if candidate.flags&suiteECDHE != 0 {
 			if !hs.ecdhOk {
+				fmt.Printf("failed1")
 				continue
 			}
 			if candidate.flags&suiteECSign != 0 {
 				if !hs.ecSignOk {
+					fmt.Printf("failed2")
 					continue
 				}
 			} else if !hs.rsaSignOk {
+				fmt.Printf("failed3")
 				continue
 			}
 		} else if !hs.rsaDecryptOk {
+			fmt.Printf("failed4")
 			continue
 		}
 		if version < VersionTLS12 && candidate.flags&suiteTLS12 != 0 {
+			fmt.Printf("failed5")
 			continue
 		}
 		hs.suite = candidate
 		return true
 	}
+	fmt.Printf("failed6")
 	return false
 }
 
