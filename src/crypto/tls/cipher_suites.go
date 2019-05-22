@@ -125,8 +125,11 @@ var cipherSuitesTLS13 = []*cipherSuiteTLS13{
 }
 
 func cipherAdiantum(key, iv []byte, isRead bool) interface{} {
-	cipher := adiantum.New(key)
-	return cipher
+	block := adiantum.New(key)
+	if isRead {
+		return cipher.NewCBCDecrypter(block, iv)
+	}
+	return cipher.NewCBCEncrypter(block, iv)
 }
 
 func cipherRC4(key, iv []byte, isRead bool) interface{} {
