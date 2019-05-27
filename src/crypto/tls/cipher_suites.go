@@ -6,16 +6,17 @@ package tls
 
 import (
 	"crypto"
-	"crypto/lukechampine/adiantum"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/des"
 	"crypto/hmac"
+	//"crypto/lukechampine/adiantum"
 	"crypto/rc4"
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/x509"
 	"golang.org/x/crypto/chacha20poly1305"
+	"golang.org/x/crypto/blowfish"
 	"hash"
 )
 
@@ -99,7 +100,8 @@ var cipherSuites = []*cipherSuite{
 	{TLS_RSA_WITH_3DES_EDE_CBC_SHA, 24, 20, 8, rsaKA, 0, cipher3DES, macSHA1, nil},
 
 	// Adiantum-based cipher suites.
-	{TLS_ECDHE_ECDSA_WITH_ADIANTUM_128_SHA256, 16, 32, 16, ecdheECDSAKA, suiteECDHE | suiteECSign | suiteTLS12 , cipherAdiantum, macSHA256, nil},
+	{TLS_ECDHE_ECDSA_WITH_ADIANTUM_128_CBC_SHA256, 16, 32, 8, ecdheECDSAKA, suiteECDHE | suiteECSign | suiteTLS12 , cipherAdiantum, macSHA256, nil},
+	{TLS_ECDHE_ECDSA_WITH_BLOWFISH_128_CBC_SHA256, 16, 32, 8, ecdheECDSAKA, suiteECDHE | suiteECSign | suiteTLS12 , cipherBlowFish, macSHA256, nil},
 	
 	// RC4-based cipher suites are disabled by default.
 	{TLS_RSA_WITH_RC4_128_SHA, 16, 20, 0, rsaKA, suiteDefaultOff, cipherRC4, macSHA1, nil},
@@ -125,7 +127,17 @@ var cipherSuitesTLS13 = []*cipherSuiteTLS13{
 }
 
 func cipherAdiantum(key, iv []byte, isRead bool) interface{} {
+	/*
 	block := adiantum.New(key)
+	if isRead {
+		return cipher.NewCBCDecrypter(block, iv)
+	}
+	return cipher.NewCBCEncrypter(block, iv)
+	*/
+}
+
+func cipherBlowFish(key, iv []byte, isRead bool) interface{} {
+	block, _ := blowfish.NewCipher(key)
 	if isRead {
 		return cipher.NewCBCDecrypter(block, iv)
 	}
@@ -474,7 +486,8 @@ const (
 	TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 uint16 = 0xc02c
 	TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305    uint16 = 0xcca8
 	TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305  uint16 = 0xcca9
-	TLS_ECDHE_ECDSA_WITH_ADIANTUM_128_SHA256 uint16 = 0xbeef
+	TLS_ECDHE_ECDSA_WITH_ADIANTUM_128_CBC_SHA256 uint16 = 0xbeef
+	TLS_ECDHE_ECDSA_WITH_BLOWFISH_128_CBC_SHA256 uint16 = 0xdddd
 
 	// TLS 1.3 cipher suites.
 	TLS_AES_128_GCM_SHA256       uint16 = 0x1301
